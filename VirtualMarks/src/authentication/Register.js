@@ -44,6 +44,7 @@ export default function Register({ navigation }) {
                     setProcessingRegister(false)
                 })
                 .catch(err => {
+                    console.log(err)
                     setError("Error occurred. Try again later")
                     setProcessingRegister(false)
                 })

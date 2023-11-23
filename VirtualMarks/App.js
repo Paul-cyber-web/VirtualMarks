@@ -5,7 +5,7 @@ import { StatusBar } from 'expo-status-bar';
 import { ActivityIndicator, Provider } from 'react-native-paper';
 import AuthContext, { AuthProvider } from './src/context/AuthContext';
 import { useContext } from 'react';
-import StackNav from './navigation/StackNav';
+import AuthNav from './navigation/AuthNav';
 import { View } from 'react-native';
 export default function App() {
 
@@ -31,15 +31,16 @@ const BottomAndAuthNav = () => {
     <>
       {loading == true ?
         <View style={{ flex: 1, justifyContent: "center", alignContent: 'center', alignItems: 'center', marginBottom: 100 }}>
-          <ActivityIndicator animating={true} color="#FF5C56" />
+          <ActivityIndicator animating={true} color="#738290" />
         </View>
         :
         <>
-          {auth?.token != null ?
+          {/* {auth?.token != null ?
             <BottomNav />
             :
-            <StackNav />
-          }
+            <AuthNav />
+          } */}
+          <BottomNav />
         </>
       }
     </>

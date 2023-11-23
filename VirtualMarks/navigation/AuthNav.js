@@ -5,7 +5,7 @@ import Register from "../src/authentication/Register";
 
 const Stack = createStackNavigator();
 
-export default function StackNav() {
+export default function AuthNav() {
     return (
         <Stack.Navigator screenOptions={{ headerShown: true, headerStyle: { backgroundColor: "#738290" }, headerTitleStyle:{fontWeight:"bold"}, headerTintColor: "white" }}>
             <Stack.Screen options={{title:"Sign in"}} name="Login" component={Login} />
