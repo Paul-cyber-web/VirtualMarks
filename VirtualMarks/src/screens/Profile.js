@@ -1,16 +1,18 @@
 import { StyleSheet, Text, View, ScrollView } from 'react-native';
-import { ActivityIndicator, Avatar, List, Button } from 'react-native-paper';
+import { ActivityIndicator, Avatar, List, Button, IconButton } from 'react-native-paper';
 import { Feather } from '@expo/vector-icons';
-import React, { useCallback, useContext, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import AuthContext from '../context/AuthContext';
 import { DataTable } from 'react-native-paper';
+import axios from 'axios'
+import JoinRoomModal from '../components/JoinRoomModal';
+import { BASE_URL } from '../../config';
 
-
-
-const Profile = () => {
+const Profile = ({ getUserRooms }) => {
 
     const { auth, logoutUser } = useContext(AuthContext)
     const [loading, setLoading] = useState(false)
+    const [code, setCode] = useState('')
     const [items] = React.useState([
         {
             key: 1,
@@ -88,6 +90,28 @@ const Profile = () => {
             grade: 3,
         },
     ]);
+    const [user, setUser] = useState({})
+
+    const [modalVisible, setModalVisible] = useState(false);
+    const showModal = () => setModalVisible(true);
+    const hideModal = () => setModalVisible(false);
+
+    const handleModalPress = (subject) => {
+        showModal()
+    }
+
+    const getUser = async () => {
+        await axios.get(BASE_URL + '/user/get-user')
+            .then(res => {
+                setUser(res.data)
+            })
+            .catch(err => console.log(err))
+    }
+
+    useEffect(() => {
+        getUser()
+    }, [])
+
 
     return (
         <>
@@ -96,45 +120,21 @@ const Profile = () => {
                     <ActivityIndicator animating={true} color="#738290" />
                 </View>
                 :
-                <ScrollView style={styles.container}>
+                <View style={styles.container}>
 
                     <View style={styles.profileDetailsContainer}>
-                        <Text style={styles.currentDay}>Paul Bunea</Text>
-                        <Text style={{ color: "black" }}>Joined on {new Date().toDateString()}</Text>
+                        <View>
+                            <Text style={styles.currentDay}>{user?.username}</Text>
+                            <Text style={{ color: "black" }}>Joined on {new Date(user?.createdAt).toDateString()}</Text>
+                        </View>
+                        <View style={{ marginRight: 10 }}>
+                            <IconButton icon="plus" mode="contained" containerColor='#738290' iconColor="white" onPress={() => handleModalPress()} />
+                        </View>
                     </View>
 
-                    <View style={{ padding: 15, paddingVertical: 20 }}>
-                        <Button style={{ width: 120 }} mode="contained" textColor="white" buttonColor='#738290'>Join class</Button>
-                    </View>
+                    <JoinRoomModal visible={modalVisible} showModal={showModal} hideModal={hideModal} getUserRooms={getUserRooms} />
 
-                    <View style={{ padding: 10, height: 320 }}>
-                        <Text style={{ color: "black", fontSize: 17, paddingLeft: 12, paddingBottom: 20 }}>All my grades</Text>
-                        <DataTable>
-                            <ScrollView>
-                                <DataTable.Header>
-                                    <DataTable.Title>Subject</DataTable.Title>
-                                    <DataTable.Title>Date</DataTable.Title>
-                                    <DataTable.Title numeric>Grade</DataTable.Title>
-                                </DataTable.Header>
-
-                                {items.map((item, index) => (
-                                    <DataTable.Row key={index}>
-                                        <DataTable.Cell>{item.subject}</DataTable.Cell>
-                                        <DataTable.Cell>{item.date}</DataTable.Cell>
-                                        <DataTable.Cell numeric>{item.grade}</DataTable.Cell>
-                                    </DataTable.Row>
-                                ))}
-                            </ScrollView>
-
-                        </DataTable>
-                    </View>
-
-                    <View style={{ paddingTop: 70 }}>
-                        <List.Item style={{ padding: 15 }} onPress={logoutUser} title="Logout" titleStyle={{ color: "#FF5C56", fontWeight: "600" }} right={() => <Feather name="log-out" color="#FF5C56" size={24} />} />
-                    </View>
-
-
-                </ScrollView>
+                </View>
             }
         </>
     )
@@ -144,9 +144,13 @@ const styles = StyleSheet.create({
     container: {
         backgroundColor: "white",
         flex: 1,
+        paddingTop: 20
     },
 
     profileDetailsContainer: {
+        display: 'flex',
+        justifyContent: "space-between",
+        flexDirection: 'row',
         paddingTop: 40,
         paddingBottom: 30,
         paddingStart: 20,

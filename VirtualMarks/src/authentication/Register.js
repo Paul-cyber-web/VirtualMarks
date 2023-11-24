@@ -40,7 +40,7 @@ export default function Register({ navigation }) {
                 .then(async (res) => {
                     await createSession(res.data.userId, res.data.token)
                     axios.defaults.headers.common['Authorization'] = `Bearer ${res.data.token}`;
-                    setAuth({ userId: res.data.userId, token: res.data.token, role: res.data.role })
+                    setAuth({ userId: res.data.userId, token: res.data.token })
                     setProcessingRegister(false)
                 })
                 .catch(err => {
@@ -62,7 +62,7 @@ export default function Register({ navigation }) {
     return (
         <ScrollView contentContainerStyle={{ justifyContent: 'center' }} style={{ flex: 1, alignContent: 'center', backgroundColor: "white", padding: 25, paddingBottom: 170 }}>
             <View style={{ width: '80%', alignSelf: 'center' }}>
-            <Text variant="headlineSmall" style={{ fontWeight: "bold", paddingVertical: 20, color: "#352E33", textAlign: 'center' }}>Sign in to VirtualMarks</Text>
+            <Text variant="headlineSmall" style={{ fontWeight: "bold", paddingVertical: 20, color: "#352E33", textAlign: 'center' }}>Sign up to VirtualMarks</Text>
                 <Text variant="bodyMedium" style={{ fontWeight: "bold", paddingVertical: 20, color: "#5F7984", textAlign: 'center' }}>For any student or teacher willing to ease their work</Text>
             </View>
             <View style={{ paddingTop: 20 }}>

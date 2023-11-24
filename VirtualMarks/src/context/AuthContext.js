@@ -13,15 +13,18 @@ export const AuthProvider = ({ children }) => {
 
 
     const logoutUser = async () => {
-        await axios.post(BASE_URL + '/user/logout')
-            .then(res => {
-                SecureStore.deleteItemAsync('userId')
-                SecureStore.deleteItemAsync('token')
-                setAuth({})
-            })
-            .catch(err => {
-                console.log(err)
-            })
+        SecureStore.deleteItemAsync('userId')
+        SecureStore.deleteItemAsync('token')
+        setAuth({})
+        // await axios.post(BASE_URL + '/user/logout')
+        //     .then(res => {
+        //         SecureStore.deleteItemAsync('userId')
+        //         SecureStore.deleteItemAsync('token')
+        //         setAuth({})
+        //     })
+        //     .catch(err => {
+        //         console.log(err)
+        //     })
 
     }
 
@@ -30,8 +33,7 @@ export const AuthProvider = ({ children }) => {
             setLoading(true)
             const userId = await SecureStore.getItemAsync('userId');
             const token = await SecureStore.getItemAsync('token');
-            const role = await SecureStore.getItemAsync('role')
-            setAuth({ 'token': token, 'userId': userId, "role": role });
+            setAuth({ 'token': token, 'userId': userId });
             axios.defaults.headers.common['Authorization'] = `Bearer ${token}`; //set the header for all the axios request
             setLoading(false)
 

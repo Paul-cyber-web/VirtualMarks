@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { View, StyleSheet, ScrollView } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { ActivityIndicator, Button, Text, TextInput } from "react-native-paper";
@@ -25,6 +25,14 @@ export default function Login({ navigation }) {
         setPassword(text)
     }
 
+    const getUserRooms = async () => {
+        await axios.post(BASE_URL + '/user/get-user-rooms', { userId: "655f0e68f1958d1981fa0525" })
+            .then(res => {
+                console.log(res.data)
+            })
+            .catch(err => console.log(err))
+    }
+
     const login = async () => {
         setProcessingLogin(true)
         axios.post(BASE_URL + `/user/login`, {
@@ -32,7 +40,8 @@ export default function Login({ navigation }) {
             password: password
         })
             .then(async (res) => {
-                await createSession(res.data.userId, res.data.token, res.data.role)
+                console.log(res.data)
+                await createSession(res.data.userId, res.data.token)
                 axios.defaults.headers.common['Authorization'] = `Bearer ${res.data.token}`;
                 setAuth({ userId: res.data.userId, token: res.data.token, role: res.data.role })
                 setProcessingLogin(false)
@@ -44,11 +53,14 @@ export default function Login({ navigation }) {
             })
     }
 
-    const createSession = async (userId, token, role) => {
+    const createSession = async (userId, token) => {
         await SecureStore.setItemAsync('userId', userId);
         await SecureStore.setItemAsync('token', token);
-        await SecureStore.setItemAsync('role', role);
     }
+
+    useEffect(()=>{
+        getUserRooms()
+    }, [])
 
     return (
         <ScrollView contentContainerStyle={{ justifyContent: "center" }} style={{ flex: 1, alignContent: 'center', backgroundColor: "white", padding: 25, paddingBottom: 170 }}>

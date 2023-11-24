@@ -1,5 +1,5 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import Home from '../src/screens/Home';
+// import Home from '../Home';
 import { Feather } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import Profile from '../src/screens/Profile';
@@ -9,7 +9,7 @@ const Tab = createBottomTabNavigator();
 export default function BottomNav() {
     return (
         <Tab.Navigator screenOptions={{ headerShown: true, headerStyle: { backgroundColor: "#738290" }, headerTitleStyle: { fontWeight: "bold" }, headerTintColor: "white" }}>
-            <Tab.Screen
+            {/* <Tab.Screen
                 name="VirtualMarks"
                 component={Home}
                 options={{
@@ -24,7 +24,7 @@ export default function BottomNav() {
                     tabBarIcon: ({ color }) => (
                         <Feather style={{ fontWeight: "bold" }} name="home" size={24} color={color} />
                     ),
-                }} />
+                }} /> */}
 
             <Tab.Screen
                 name="Profile"

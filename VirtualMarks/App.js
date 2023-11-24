@@ -1,12 +1,14 @@
 import 'react-native-gesture-handler';
 import { NavigationContainer } from '@react-navigation/native';
-import BottomNav from './navigation/BottomNav'
 import { StatusBar } from 'expo-status-bar';
 import { ActivityIndicator, Provider } from 'react-native-paper';
 import AuthContext, { AuthProvider } from './src/context/AuthContext';
 import { useContext } from 'react';
 import AuthNav from './navigation/AuthNav';
 import { View } from 'react-native';
+import Home from './src/screens/Home';
+
+
 export default function App() {
 
   return (
@@ -35,12 +37,13 @@ const BottomAndAuthNav = () => {
         </View>
         :
         <>
-          {/* {auth?.token != null ?
-            <BottomNav />
+          {auth?.token != null ?
+            <Home />
             :
             <AuthNav />
-          } */}
-          <BottomNav />
+          }
+          {/* <Home /> */}
+          {/* <AuthNav /> */}
         </>
       }
     </>
